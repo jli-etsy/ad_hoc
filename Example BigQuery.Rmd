@@ -1,0 +1,47 @@
+---
+title: "Example BigQuery"
+output: html_document
+date: "2022-11-01"
+---
+
+```{r}
+## Install the bigrquery package if you don't have it yet
+## https://bigrquery.r-dbi.org/index.html
+
+install.packages('bigrquery')
+library(bigrquery)
+```
+
+```{r}
+# define your billing project. 99% of the time it should be 
+# etsy-bigquery-adhoc-prod
+
+billing <- 'etsy-bigquery-adhoc-prod'
+```
+
+```{r}
+# Run your query
+
+sql <- "select 
+  auth_username
+  , cast(timestamp_seconds(join_date) as date) as join_date 
+from 
+  etsy-data-warehouse-prod.etsy_aux.staff 
+where 
+  auth_username in (
+  'jbagesvilladiego',
+  'bmcgonigle',
+  'bchoi')"
+
+# Authenticate to bq
+bq_auth()
+
+# Runs query and saves it to a temp table
+tb <- bq_project_query(billing, sql)
+
+# Downloads temp table to a data frame
+df <- bq_table_download(tb)
+
+# Sample result
+head(df)
+```
