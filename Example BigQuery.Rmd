@@ -8,7 +8,6 @@ date: "2022-11-01"
 ## Install the bigrquery package if you don't have it yet
 ## https://bigrquery.r-dbi.org/index.html
 
-install.packages('bigrquery')
 library(bigrquery)
 ```
 
